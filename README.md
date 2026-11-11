@@ -1,24 +1,29 @@
-# Projeto de estudo: backend com PHP
+# Study Project: PHP Backend
 
-Aplicação de estudo para praticar PHP no backend com formulários, requisições HTTP, PDO e MySQL. O projeto também contém exercícios de orientação a objetos em `src/`.
+A study project for practicing PHP backend development with forms, HTTP requests, PDO, and MySQL. The project also includes object-oriented programming exercises in `src/`.
 
-## Funcionalidades atuais
+## Setup Guide
 
-- Cadastro, listagem, busca, conclusão e remoção de tarefas.
-- Formulário de contato que grava mensagens no banco.
-- Consultas preparadas com PDO.
-- Validação de entrada, proteção CSRF e escape de conteúdo HTML.
-- Criação automática das tabelas `tarefas` e `mensagens` ao conectar ao banco.
+- [Windows setup](#study-environment-setup-windows)
+- [Linux setup](#study-environment-setup-linux)
 
-## Requisitos
+## Current Features
 
-- PHP 8.1 ou superior.
-- Extensões PHP `pdo_mysql` e `mbstring`.
-- Servidor MySQL local.
+- Create, list, search, complete, and delete tasks.
+- Contact form that saves messages to the database.
+- Prepared PDO queries.
+- Input validation, CSRF protection, and HTML content escaping.
+- Automatic creation of the `tarefas` and `mensagens` tables when connecting to the database.
 
-## Executar
+## Requirements
 
-Na pasta do projeto, configure as variáveis de conexão ao MySQL e inicie o servidor local:
+- PHP 8.1 or later.
+- PHP extensions `pdo_mysql` and `mbstring`.
+- A local MySQL server.
+
+## Run
+
+From the project directory, configure the MySQL connection variables and start the local server:
 
 ```powershell
 $env:DB_HOST = '127.0.0.1'
@@ -29,42 +34,42 @@ $env:DB_PASSWORD = ''
 php -S 127.0.0.1:8000
 ```
 
-Abra `http://127.0.0.1:8000` no navegador. Ajuste usuário e senha conforme a configuração do seu MySQL. As variáveis definidas no PowerShell valem apenas para aquela janela.
+Open `http://127.0.0.1:8000` in your browser. Update the username and password to match your MySQL configuration. Variables set in PowerShell are only available in that terminal window.
 
-## Estrutura principal
+## Main Structure
 
 ```text
-index.php          Gerenciador de tarefas
-contato.php        Formulário de contato e histórico
+index.php          Task manager
+contato.php        Contact form and message history
 includes/
-  config.php       Sessão e configuração geral
-  db.php           Conexão PDO com MySQL e criação das tabelas
-  funcoes.php      Escape HTML, CSRF, redirecionamentos e mensagens
-src/               Exercícios de orientação a objetos
-css/               Estilos
+  config.php       Session and general configuration
+  db.php           PDO connection to MySQL and table creation
+  funcoes.php      HTML escaping, CSRF, redirects, and flash messages
+src/               Object-oriented programming exercises
+css/               Stylesheets
 js/                JavaScript
 ```
 
-O foco atual é praticar aplicações web com banco de dados. A pasta `src/` contém exercícios separados e ainda não é usada pelas páginas de tarefas e contato.
+The current focus is practicing web applications with a database. The exercises in `src/` are separate and are not used by the task and contact pages.
 
-# Instalação do ambiente de estudo (Windows)
+# Study Environment Setup (Windows)
 
-## 1. Instale e inicie o ambiente local
+## 1. Install and start the local environment
 
-Instale o [Laragon Full](https://laragon.org/download), que inclui PHP e MySQL. Inicie os serviços **Apache** e **MySQL** pelo Laragon. O XAMPP também pode ser usado, desde que o PHP tenha as extensões `pdo_mysql` e `mbstring` habilitadas.
+Install [Laragon Full](https://laragon.org/download), which includes PHP and MySQL. Start the **Apache** and **MySQL** services in Laragon. XAMPP can also be used, provided its PHP installation has the `pdo_mysql` and `mbstring` extensions enabled.
 
-Abra o terminal do Laragon (ou um novo PowerShell) e confira:
+Open the Laragon terminal (or a new PowerShell window) and check:
 
 ```powershell
 php -v
 php -m
 ```
 
-Na lista de módulos de `php -m`, confirme que aparecem `PDO`, `pdo_mysql` e `mbstring`. Se `php` não for reconhecido no PowerShell, use o terminal do Laragon ou configure o PHP no `PATH`.
+Make sure the `PDO`, `pdo_mysql`, and `mbstring` modules appear in the `php -m` output. If PowerShell does not recognize `php`, use the Laragon terminal or add PHP to your `PATH`.
 
-## 2. Crie o banco de dados
+## 2. Create the database
 
-No cliente MySQL que acompanha seu ambiente (por exemplo, HeidiSQL ou phpMyAdmin), execute:
+In the MySQL client included with your environment (for example, HeidiSQL or phpMyAdmin), run:
 
 ```sql
 CREATE DATABASE estudo_php
@@ -72,11 +77,11 @@ CREATE DATABASE estudo_php
     COLLATE utf8mb4_unicode_ci;
 ```
 
-O usuário configurado para a aplicação precisa ter permissão para criar e alterar tabelas nesse banco. As tabelas `tarefas` e `mensagens` são criadas automaticamente pelo projeto na primeira conexão.
+The application’s database user must have permission to create and modify tables in this database. The project automatically creates the `tarefas` and `mensagens` tables on the first connection.
 
-## 3. Configure e execute o projeto
+## 3. Configure and run the project
 
-No PowerShell, entre na pasta do projeto e defina os dados do seu MySQL. O exemplo abaixo usa a configuração padrão comum do Laragon; altere usuário e senha se o seu ambiente for diferente:
+In PowerShell, go to the project directory and set your MySQL connection details. The example below uses common Laragon defaults; change the username and password if your environment uses different values:
 
 ```powershell
 cd "C:\Users\user\Documents\Estudos PHP"
@@ -88,11 +93,78 @@ $env:DB_PASSWORD = ''
 php -S 127.0.0.1:8000
 ```
 
-Deixe essa janela aberta e acesse <http://127.0.0.1:8000>. As variáveis `$env:DB_*` permanecem disponíveis apenas na janela atual do PowerShell. Não use a conta `root` nem credenciais sem senha em um servidor público.
+Keep this terminal window open and visit <http://127.0.0.1:8000>. The `$env:DB_*` variables are only available in the current PowerShell window. Do not use the `root` account or passwordless credentials on a public server.
 
-## Se algo não funcionar
+## Troubleshooting
 
-- **`php` não é reconhecido:** abra o terminal do Laragon ou adicione a pasta do PHP ao `PATH`.
-- **Erro de driver MySQL:** habilite `pdo_mysql` no `php.ini` usado pelo PHP e reinicie o terminal.
-- **Erro de conexão:** confirme que o serviço MySQL está iniciado e que host, porta, banco, usuário e senha correspondem ao seu ambiente.
-- **Banco inexistente:** execute o comando `CREATE DATABASE` da etapa 2.
+- **`php` is not recognized:** open the Laragon terminal or add the PHP directory to your `PATH`.
+- **MySQL driver error:** enable `pdo_mysql` in the `php.ini` file used by PHP and restart the terminal.
+- **Connection error:** make sure the MySQL service is running and that the host, port, database, username, and password are correct.
+- **Database does not exist:** run the `CREATE DATABASE` command from step 2.
+
+# Study Environment Setup (Linux)
+
+The commands below are for Ubuntu and Debian. For other distributions, use the equivalent package manager and service commands.
+
+## 1. Install PHP and MySQL
+
+Install PHP CLI, the required PHP extensions, and MySQL:
+
+```bash
+sudo apt update
+sudo apt install php-cli php-mysql php-mbstring mysql-server
+sudo systemctl enable --now mysql
+```
+
+Check the PHP version and confirm the required modules are enabled:
+
+```bash
+php -v
+php -m
+```
+
+Make sure PHP 8.1 or later is installed and that `PDO`, `pdo_mysql`, and `mbstring` appear in the module list.
+
+## 2. Create the database and application user
+
+Open the MySQL client:
+
+```bash
+sudo mysql
+```
+
+Create the database and a dedicated local user. Replace the example password with a strong password of your choice:
+
+```sql
+CREATE DATABASE estudo_php
+    CHARACTER SET utf8mb4
+    COLLATE utf8mb4_unicode_ci;
+
+CREATE USER 'estudo_user'@'127.0.0.1' IDENTIFIED BY 'replace_with_a_strong_password';
+GRANT ALL PRIVILEGES ON estudo_php.* TO 'estudo_user'@'127.0.0.1';
+EXIT;
+```
+
+The project creates the `tarefas` and `mensagens` tables automatically on the first connection.
+
+## 3. Configure and run the project
+
+From the project directory, set the MySQL connection variables and start PHP’s built-in server:
+
+```bash
+export DB_HOST='127.0.0.1'
+export DB_PORT='3306'
+export DB_NAME='estudo_php'
+export DB_USER='estudo_user'
+export DB_PASSWORD='replace_with_a_strong_password'
+php -S 127.0.0.1:8000
+```
+
+Visit <http://127.0.0.1:8000>. Keep the terminal open while using the application. These environment variables apply only to the current terminal session.
+
+## Troubleshooting
+
+- **`php` is not found:** install `php-cli` or make sure PHP is available in your `PATH`.
+- **Missing MySQL driver:** install `php-mysql` and confirm `pdo_mysql` appears in `php -m`.
+- **MySQL is not running:** check the service with `sudo systemctl status mysql` and start it with `sudo systemctl start mysql`.
+- **Connection error:** verify the MySQL service and the `DB_*` values, including the username and password.
