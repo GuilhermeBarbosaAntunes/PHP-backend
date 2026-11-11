@@ -13,7 +13,7 @@ if ($dbPassword === false) {
 
 if ($dbUser === false || $dbUser === '') {
     http_response_code(500);
-    exit('Configure DB_USER e as demais variáveis de conexão com o MySQL antes de iniciar o projeto.');
+    exit('Configure DB_USER and the other MySQL connection variables before starting the project.');
 }
 
 if (
@@ -24,7 +24,7 @@ if (
     || preg_match('/\A[a-zA-Z0-9_]+\z/', $dbName) !== 1
 ) {
     http_response_code(500);
-    exit('Configuração inválida de host, porta ou nome do banco MySQL.');
+    exit('Invalid MySQL host, port, or database name configuration.');
 }
 
 $dsn = sprintf(
@@ -41,27 +41,27 @@ try {
         PDO::ATTR_EMULATE_PREPARES   => false,
     ]);
 } catch (PDOException $e) {
-    error_log('Falha ao conectar ao MySQL: ' . $e->getMessage());
+    error_log('Failed to connect to MySQL: ' . $e->getMessage());
     http_response_code(500);
-    exit('Falha ao conectar ao MySQL. Confira se o servidor está ativo e se as configurações DB_* estão corretas.');
+    exit('Failed to connect to MySQL. Check that the server is running and that the DB_* settings are correct.');
 }
 
 $pdo->exec("
-    CREATE TABLE IF NOT EXISTS tarefas (
+    CREATE TABLE IF NOT EXISTS tasks (
         id        INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-        titulo    VARCHAR(120) NOT NULL,
-        concluida TINYINT(1) NOT NULL DEFAULT 0,
-        criado_em TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+        title    VARCHAR(120) NOT NULL,
+        completed TINYINT(1) NOT NULL DEFAULT 0,
+        created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 ");
 
 $pdo->exec("
-    CREATE TABLE IF NOT EXISTS mensagens (
+    CREATE TABLE IF NOT EXISTS messages (
         id        INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-        nome      VARCHAR(80) NOT NULL,
+        name      VARCHAR(80) NOT NULL,
         email     VARCHAR(120) NOT NULL,
-        mensagem  TEXT NOT NULL,
+        message TEXT NOT NULL,
         ip        VARCHAR(45) NULL,
-        criado_em TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+        created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 ");

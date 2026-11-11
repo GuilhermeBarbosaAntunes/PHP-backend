@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modelo;
+namespace App\Models;
 
 /**
  * DTO (data transfer object) - the equivalent of a TypeScript "shape".
@@ -13,11 +13,11 @@ namespace App\Modelo;
  *   (instead of declaring each field separately as in TS classes)
  * - "readonly": like readonly in TS - it cannot be changed after creation
  */
-final class Usuario
+final class User
 {
     public function __construct(
         public readonly int $id,
-        public readonly string $nome,
+        public readonly string $name,
         // "?string" = "string | null" in TS. It can be omitted.
         public readonly ?string $email = null,
     ) {
@@ -25,15 +25,15 @@ final class Usuario
 
     /**
      * Method with parameter and return types, just like in TS:
-     *   apresentar(): string
+     *   present(): string
      */
-    public function apresentar(): string
+    public function present(): string
     {
         // Interpolation: double quotes interpolate variables (like JS template strings)
         // "??" is the null coalescing operator, just like in JS/TS
-        $emailInfo = $this->email ?? 'sem e-mail';
+        $emailInfo = $this->email ?? 'yours e-mail';
 
-        return "{$this->nome} (id {$this->id}) — {$emailInfo}";
+        return "{$this->name} (id {$this->id}) — {$emailInfo}";
     }
 
     /**
@@ -43,7 +43,7 @@ final class Usuario
     {
         return [
             'id'    => $this->id,
-            'nome'  => $this->nome,
+            'name'  => $this->name,
             'email' => $this->email,
         ];
     }

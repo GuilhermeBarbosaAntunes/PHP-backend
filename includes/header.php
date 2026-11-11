@@ -1,6 +1,6 @@
 <?php
-if (!isset($titulo)) {
-    $titulo = 'MeuSite';
+if (!isset($Title)) {
+    $Title = 'My Site';
 }
 ?>
 <!DOCTYPE html>
@@ -8,17 +8,17 @@ if (!isset($titulo)) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= e($titulo) ?> | MeuSite</title>
+    <title><?= e($Title) ?> | My Site</title>
     <link rel="stylesheet" href="css/estilo.css">
 </head>
 <body>
     <header class="topo">
         <div class="container topo-inner">
-            <a href="index.php" class="logo">🐘 MeuSite</a>
+            <a href="index.php" class="logo">🐘 My Site</a>
             <nav>
                 <ul class="menu">
-                    <li><a href="index.php">Tarefas</a></li>
-                    <li><a href="contato.php">Contato</a></li>
+                    <li><a href="index.php">Task</a></li>
+                    <li><a href="contact.php">Contact</a></li>
                 </ul>
             </nav>
         </div>

@@ -2,7 +2,7 @@
 
     <footer class="rodape">
         <div class="container">
-            <p>&copy; <?= date('Y') ?> MeuSite — estudo de PHP backend</p>
+            <p>&copy; <?= date('Y') ?> PHP backend students</p>
         </div>
     </footer>
 

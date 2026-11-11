@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
         contador.style.color = '#94a3b8';
         txt.after(contador);
         const atualizar = () => {
-            contador.textContent = `${txt.value.length} caracteres (mín. 10)`;
+            contador.textContent = `${txt.value.length} characters (mín. 10)`;
         };
         txt.addEventListener('input', atualizar);
         atualizar();

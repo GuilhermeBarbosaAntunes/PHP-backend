@@ -8,14 +8,14 @@ require __DIR__ . '/includes/funcoes.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     csrf_check();
 
-    $nome     = trim((string) ($_POST['nome'] ?? ''));
+    $name     = trim((string) ($_POST['name'] ?? ''));
     $email    = trim((string) ($_POST['email'] ?? ''));
-    $mensagem = trim((string) ($_POST['mensagem'] ?? ''));
+    $mensagem = trim((string) ($_POST['message'] ?? ''));
 
     $erros = [];
 
-    if (mb_strlen($nome) < 3) {
-        $erros[] = 'O nome deve ter pelo menos 3 caracteres.';
+    if (mb_strlen($name) < 3) {
+        $erros[] = 'O name deve ter pelo menos 3 caracteres.';
     }
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $erros[] = 'Informe um e-mail válido.';
@@ -33,11 +33,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $pdo->beginTransaction();
         try {
             $stmt = $pdo->prepare(
-                'INSERT INTO mensagens (nome, email, mensagem, ip)
+                'INSERT INTO mensagens (name, email, mensagem, ip)
                  VALUES (:n, :e, :m, :ip)'
             );
             $stmt->execute([
-                ':n'  => $nome,
+                ':n'  => $name,
                 ':e'  => $email,
                 ':m'  => $mensagem,
                 ':ip' => $_SERVER['REMOTE_ADDR'] ?? null,
@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 // Latest messages (to verify that the INSERT worked)
 $mensagens = $pdo->query(
-    'SELECT nome, email, mensagem, criado_em
+    'SELECT name, email, mensagem, criado_em
      FROM mensagens
      ORDER BY id DESC
      LIMIT 5'
@@ -73,8 +73,8 @@ include __DIR__ . '/includes/header.php';
 <form method="POST" class="form-contato">
     <?= csrf_campo() ?>
 
-    <label>Nome</label>
-    <input type="text" name="nome" maxlength="80" required>
+    <label>name</label>
+    <input type="text" name="name" maxlength="80" required>
 
     <label>E-mail</label>
     <input type="email" name="email" maxlength="120" required>
@@ -92,7 +92,7 @@ include __DIR__ . '/includes/header.php';
     <ul class="lista-mensagens">
         <?php foreach ($mensagens as $m): ?>
             <li>
-                <strong><?= e($m['nome']) ?></strong>
+                <strong><?= e($m['name']) ?></strong>
                 <span class="email">&lt;<?= e($m['email']) ?>&gt;</span>
                 <small class="data"><?= e($m['criado_em']) ?></small>
                 <p><?= nl2br(e($m['mensagem'])) ?></p>

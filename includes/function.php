@@ -2,9 +2,9 @@
 declare(strict_types=1);
 
 /** Converts any value to a safe string for HTML output (XSS prevention). */
-function e(mixed $valor): string
+function e(mixed $value): string
 {
-    return htmlspecialchars((string) $valor, ENT_QUOTES, 'UTF-8');
+    return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
 }
 
 /** Redirects and exits (used in the PRG pattern).
@@ -18,9 +18,9 @@ function redirect(string $url): never
 }
 
 /** Stores a message in the session to display it once. */
-function flash(string $tipo, string $msg): void
+function flash(string $type, string $msg): void
 {
-    $_SESSION['flash'][] = ['tipo' => $tipo, 'msg' => $msg];
+    $_SESSION['flash'][] = ['type' => $type, 'msg' => $msg];
 }
 
 /** Retrieves and clears flash messages. */
@@ -49,10 +49,10 @@ function csrf_campo(): string
 /** Aborts the request if the token is invalid. */
 function csrf_check(): void
 {
-    $enviado = $_POST['csrf'] ?? '';
-    if (!hash_equals($_SESSION['csrf'] ?? '', (string) $enviado)) {
+    $sended = $_POST['csrf'] ?? '';
+    if (!hash_equals($_SESSION['csrf'] ?? '', (string) $sended)) {
         http_response_code(419);
-        exit('Token CSRF inválido ou expirado.');
+        exit('Invalid or expired CSRF token.');
     }
 }
 
