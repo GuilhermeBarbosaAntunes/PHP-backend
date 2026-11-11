@@ -7,7 +7,10 @@ function e(mixed $valor): string
     return htmlspecialchars((string) $valor, ENT_QUOTES, 'UTF-8');
 }
 
-/** Redireciona e encerra (usado no padrão PRG) */
+/** Redireciona e encerra (usado no padrão PRG)
+ * @param string $url
+ * @return never Indica que a função nunca retorna: ela encerra a execução ou lança uma exceção.
+ */
 function redirect(string $url): never
 {
     header("Location: $url");
