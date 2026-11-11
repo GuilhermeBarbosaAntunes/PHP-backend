@@ -16,8 +16,6 @@ Aplicação de estudo para praticar PHP no backend com formulários, requisiçõ
 - Extensões PHP `pdo_mysql` e `mbstring`.
 - Servidor MySQL local.
 
-Veja [INSTALACAO.md](./INSTALACAO.md) para configurar o ambiente no Windows.
-
 ## Executar
 
 Na pasta do projeto, configure as variáveis de conexão ao MySQL e inicie o servidor local:
