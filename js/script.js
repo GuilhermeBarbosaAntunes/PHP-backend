@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Contador de caracteres no formulário de contato
+    // Character counter for the contact form
     const txt = document.querySelector('.form-contato textarea');
     if (txt) {
         const contador = document.createElement('small');

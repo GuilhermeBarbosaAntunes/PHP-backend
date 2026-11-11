@@ -6,11 +6,11 @@ use App\Modelo\Usuario;
 use App\Repositorio\RepositorioInterface;
 
 /**
- * Camada de regra de negócio.
+ * Business logic layer.
  *
- * Repare no construtor: ele recebe a INTERFACE, não a implementação.
- * Isso é "injeção de dependência" — igual ao NestJS/Angular: quem chama
- * decide qual repositório usar, e o serviço não sabe nem se importa.
+ * Notice that the constructor receives the INTERFACE, not the implementation.
+ * This is "dependency injection" - like in NestJS/Angular: the caller decides
+ * which repository to use, and the service does not know or care which one.
  */
 final class ServicoUsuario
 {
@@ -21,10 +21,10 @@ final class ServicoUsuario
 
     public function cadastrar(string $nome, ?string $email = null): Usuario
     {
-        // trim() e strlen() existem no JS também — mesma ideia
+        // trim() and strlen() also exist in JS - the same idea
         $nome = trim($nome);
 
-        // Validação com comparação ESTRITA (===) — igual ao TS
+        // Validation with STRICT comparison (===) - just like in TS
         if ($nome === '') {
             throw new \InvalidArgumentException('O nome é obrigatório.');
         }
@@ -33,11 +33,11 @@ final class ServicoUsuario
             throw new \InvalidArgumentException('E-mail não pode ser só espaço.');
         }
 
-        // Gera id simples: count do repositório + 1
+        // Generate a simple ID: repository count + 1
         $novoId = count($this->repositorio->buscarTodos()) + 1;
 
         $usuario = new Usuario(
-            id: $novoId,          // argumentos nomeados, tipo objeto literal do JS!
+            id: $novoId,          // named arguments, similar to a JS object literal
             nome: $nome,
             email: $email,
         );

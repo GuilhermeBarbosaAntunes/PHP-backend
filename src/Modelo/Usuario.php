@@ -3,41 +3,41 @@
 namespace App\Modelo;
 
 /**
- * DTO (objeto de dados) — o substituto do "shape" do TypeScript.
+ * DTO (data transfer object) - the equivalent of a TypeScript "shape".
  *
- * Em TS você faria:  type Usuario = { id: number; nome: string; ... }
- * Em PHP, para ter tipos de verdade, usamos uma CLASSE.
+ * In TS, you might write:  type Usuario = { id: number; nome: string; ... }
+ * In PHP, we use a CLASS to get real types.
  *
- * Conceitos novos para você (PHP 8+):
- * - "constructor promotion": declara e tipa as propriedades direto no construtor
- *   (em vez de declarar campo por campo como em classes TS)
- * - "readonly": igual ao readonly do TS — não pode alterar depois de criado
+ * New concepts for you (PHP 8+):
+ * - "constructor promotion": declares and types properties directly in the constructor
+ *   (instead of declaring each field separately as in TS classes)
+ * - "readonly": like readonly in TS - it cannot be changed after creation
  */
 final class Usuario
 {
     public function __construct(
         public readonly int $id,
         public readonly string $nome,
-        // "?string" = "string | null" do TS. Pode ser omitido.
+        // "?string" = "string | null" in TS. It can be omitted.
         public readonly ?string $email = null,
     ) {
     }
 
     /**
-     * Método com tipagem de parâmetro e de retorno, igual ao TS:
+     * Method with parameter and return types, just like in TS:
      *   apresentar(): string
      */
     public function apresentar(): string
     {
-        // Interpolação: aspas duplas interpolam variáveis (template string do JS)
-        // "??" é o null coalescing — idêntico ao JS/TS
+        // Interpolation: double quotes interpolate variables (like JS template strings)
+        // "??" is the null coalescing operator, just like in JS/TS
         $emailInfo = $this->email ?? 'sem e-mail';
 
         return "{$this->nome} (id {$this->id}) — {$emailInfo}";
     }
 
     /**
-     * Converte para array associativo (como o .toJSON() / spread de objeto do JS)
+     * Converts to an associative array (like .toJSON() / object spread in JS)
      */
     public function paraArray(): array
     {

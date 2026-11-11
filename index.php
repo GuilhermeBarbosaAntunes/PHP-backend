@@ -9,7 +9,7 @@ $filtro = $_GET['filtro'] ?? 'todas';
 $busca  = trim((string) ($_GET['busca'] ?? ''));
 
 /* ============================================================
-   AÇÕES (POST) — todas via PRG: processa → redireciona
+   ACTIONS (POST) - all use PRG: process, then redirect
    ============================================================ */
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     csrf_check();
@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 /* ============================================================
-   CONSULTAS (GET)
+   QUERIES (GET)
    ============================================================ */
 $where  = [];
 $params = [];

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 date_default_timezone_set('America/Sao_Paulo');
 
-// Sessão segura (cookie HttpOnly + SameSite)
+// Secure session (HttpOnly + SameSite cookie)
 if (session_status() !== PHP_SESSION_ACTIVE) {
     session_start([
         'cookie_httponly' => true,
@@ -11,6 +11,6 @@ if (session_status() !== PHP_SESSION_ACTIVE) {
     ]);
 }
 
-// Em produção: display_errors = 0 e log_errors = 1
+// In production: display_errors = 0 and log_errors = 1
 error_reporting(E_ALL);
 ini_set('display_errors', '1');

@@ -5,23 +5,23 @@ namespace App\Repositorio;
 use App\Modelo\Usuario;
 
 /**
- * INTERFACE — praticamente idêntica ao TypeScript.
+ * INTERFACE - almost identical to TypeScript.
  *
- * O TS:                              O PHP:
+ * TS:                                PHP:
  * interface Repositorio {            interface Repositorio {
  *   buscar(id: number): Usuario;       public function buscar(int $id): Usuario;
  * }                                  }
  *
- * Só difere em: "public" é obrigatório nos métodos da interface.
+ * The only difference: "public" is required for interface methods.
  *
- * Quem implementar esta interface é OBRIGADO a ter esses métodos
- * com essas assinaturas — contrato igual ao do TS.
+ * Any class implementing this interface MUST have these methods
+ * with these signatures - a contract just like in TS.
  */
 interface RepositorioInterface
 {
-    public function buscar(int $id): ?Usuario;   // pode não encontrar → nullable
+    public function buscar(int $id): ?Usuario;   // may not find a match -> nullable
 
-    /** @return Usuario[]  (docblock: o PHPStan/IDE entende "array de Usuario") */
+    /** @return Usuario[] (docblock: PHPStan/IDE understands "array of Usuario") */
     public function buscarTodos(): array;
 
     public function salvar(Usuario $usuario): bool;

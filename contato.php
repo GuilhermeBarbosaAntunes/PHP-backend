@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             flash('erro', $msg);
         }
     } else {
-        // Uso de transação (bom hábito mesmo com 1 INSERT)
+        // Use a transaction (a good practice even with a single INSERT)
         $pdo->beginTransaction();
         try {
             $stmt = $pdo->prepare(
@@ -53,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     redirect('contato.php');
 }
 
-// Últimas mensagens (para conferir que o INSERT funcionou)
+// Latest messages (to verify that the INSERT worked)
 $mensagens = $pdo->query(
     'SELECT nome, email, mensagem, criado_em
      FROM mensagens

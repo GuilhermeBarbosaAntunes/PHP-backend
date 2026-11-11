@@ -5,26 +5,26 @@ namespace App\Repositorio;
 use App\Modelo\Usuario;
 
 /**
- * Implementação da interface guardando dados em MEMÓRIA (array).
+ * Interface implementation that stores data in MEMORY (array).
  *
- * "implements RepositorioInterface" = "implements Repositorio" do TS.
- * Se faltar algum método do contrato, o PHP acusa erro.
+ * "implements RepositorioInterface" = "implements Repositorio" in TS.
+ * If a required method is missing, PHP reports an error.
  */
 final class RepositorioMemoria implements RepositorioInterface
 {
     /**
-     * Array associativo privado — como um Map<string, Usuario>.
-     * A chave é o id do usuário (string).
+     * Private associative array - like a Map<string, Usuario>.
+     * The key is the user's ID (string).
      *
-     * Em PHP, propriedade tipada: private array $usuarios = [];
+     * In PHP, this is a typed property: private array $usuarios = [];
      */
     private array $usuarios = [];
 
     public function buscar(int $id): ?Usuario
     {
-        // isset() = "existe essa chave?" (truthy check de objeto do JS)
+        // isset() = "does this key exist?" (like a JS object truthiness check)
         if (!isset($this->usuarios[$id])) {
-            return null;   // sem Optional<Usuario>, só null mesmo
+            return null;   // no Optional<Usuario>; just null
         }
 
         return $this->usuarios[$id];
@@ -32,7 +32,7 @@ final class RepositorioMemoria implements RepositorioInterface
 
     public function buscarTodos(): array
     {
-        // array_values() reindexa o array (0,1,2...) — tipo o Object.values()
+        // array_values() reindexes the array (0,1,2...), like Object.values()
         return array_values($this->usuarios);
     }
 
