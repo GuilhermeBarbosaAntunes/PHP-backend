@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 require __DIR__ . '/includes/config.php';
 require __DIR__ . '/includes/db.php';
-require __DIR__ . '/includes/funcoes.php';
+require __DIR__ . '/includes/function.php';
 
 $filter = $_GET['filter'] ?? 'all';
 $search  = trim((string) ($_GET['search'] ?? ''));
@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             flash('success', 'Status changed.');
             break;
 
-        case 'excluir':
+        case 'delete':
             $id = (int) ($_POST['id'] ?? 0);
             $stmt = $pdo->prepare('DELETE FROM tasks WHERE id = :id');
             $stmt->execute([':id' => $id]);
@@ -101,7 +101,7 @@ include __DIR__ . '/includes/header.php';
     <button class="btn" type="submit">Add</button>
 </form>
 
-<form method="GET" class="filtros">
+<form method="GET" class="filters">
     <input type="text" name="search" value="<?= e($search) ?>" placeholder="Search…">
     <button class="btn btn-sec" type="submit">Filter</button>
 

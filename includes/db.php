@@ -5,7 +5,7 @@ $dbHost = getenv('DB_HOST') ?: '127.0.0.1';
 $dbPort = getenv('DB_PORT') ?: '3306';
 $dbName = getenv('DB_NAME') ?: 'estudo_php';
 $dbUser = getenv('DB_USER');
-$dbPassword = getenv('DB_PASSWORD');
+$dbPassword = getenv('DB_PASSWORD') ?: '162534';
 
 if ($dbPassword === false) {
     $dbPassword = '';
