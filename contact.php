@@ -10,92 +10,92 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $name     = trim((string) ($_POST['name'] ?? ''));
     $email    = trim((string) ($_POST['email'] ?? ''));
-    $mensagem = trim((string) ($_POST['message'] ?? ''));
+    $messages = trim((string) ($_POST['message'] ?? ''));
 
-    $erros = [];
+    $errors = [];
 
     if (mb_strlen($name) < 3) {
-        $erros[] = 'O name deve ter pelo menos 3 caracteres.';
+        $errors[] = 'The name must have at least 3 characters.';
     }
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $erros[] = 'Informe um e-mail válido.';
+        $errors[] = 'Please enter a valid email address.';
     }
-    if (mb_strlen($mensagem) < 10) {
-        $erros[] = 'A mensagem deve ter pelo menos 10 caracteres.';
+    if (mb_strlen($messages) < 10) {
+        $errors[] = 'The message must have at least 10 characters.';
     }
 
-    if ($erros) {
-        foreach ($erros as $msg) {
-            flash('erro', $msg);
+    if ($errors) {
+        foreach ($errors as $msg) {
+            flash('error', $msg);
         }
     } else {
         // Use a transaction (a good practice even with a single INSERT)
         $pdo->beginTransaction();
         try {
             $stmt = $pdo->prepare(
-                'INSERT INTO mensagens (name, email, mensagem, ip)
+                'INSERT INTO messages (name, email, message, ip)
                  VALUES (:n, :e, :m, :ip)'
             );
             $stmt->execute([
                 ':n'  => $name,
                 ':e'  => $email,
-                ':m'  => $mensagem,
+                ':m'  => $messages,
                 ':ip' => $_SERVER['REMOTE_ADDR'] ?? null,
             ]);
             $pdo->commit();
-            flash('sucesso', 'Mensagem gravada no banco com sucesso.');
+            flash('success', 'Message saved to the database successfully.');
         } catch (Throwable $ex) {
             $pdo->rollBack();
-            flash('erro', 'Falha ao salvar. Tente novamente.');
+            flash('error', 'Failed to save. Please try again.');
         }
     }
 
-    redirect('contato.php');
+    redirect('contact.php');
 }
 
 // Latest messages (to verify that the INSERT worked)
-$mensagens = $pdo->query(
-    'SELECT name, email, mensagem, criado_em
-     FROM mensagens
+$messages = $pdo->query(
+    'SELECT name, email, message, created_at
+     FROM messages
      ORDER BY id DESC
      LIMIT 5'
 )->fetchAll();
 
-$total = (int) $pdo->query('SELECT COUNT(*) FROM mensagens')->fetchColumn();
+$total = (int) $pdo->query('SELECT COUNT(*) FROM messages')->fetchColumn();
 
-$titulo = 'Contato';
+$titulo = 'Contact';
 include __DIR__ . '/includes/header.php';
 ?>
 
-<h1>✉️ Fale Conosco</h1>
-<p class="subtitulo">Total de mensagens no banco: <strong><?= $total ?></strong></p>
+<h1>✉️ Contact Us</h1>
+<p class="subtitle">Total number of messages in the database: <strong><?= $total ?></strong></p>
 
-<form method="POST" class="form-contato">
+<form method="POST" class="form-contact">
     <?= csrf_campo() ?>
 
-    <label>name</label>
+    <label>Name</label>
     <input type="text" name="name" maxlength="80" required>
 
     <label>E-mail</label>
     <input type="email" name="email" maxlength="120" required>
 
-    <label>Mensagem</label>
-    <textarea name="mensagem" rows="5" minlength="10" required></textarea>
+    <label>Message</label>
+    <textarea name="message" rows="5" minlength="10" required></textarea>
 
-    <button class="btn" type="submit">Enviar</button>
+    <button class="btn" type="submit">Send</button>
 </form>
 
-<h2>Últimas mensagens</h2>
-<?php if (!$mensagens): ?>
-    <p class="vazio">Nada gravado ainda.</p>
+<h2>Latest Messages</h2>
+<?php if (!$messages): ?>
+    <p class="void">No messages saved yet.</p>
 <?php else: ?>
-    <ul class="lista-mensagens">
-        <?php foreach ($mensagens as $m): ?>
+    <ul class="message-list">
+        <?php foreach ($messages as $m): ?>
             <li>
                 <strong><?= e($m['name']) ?></strong>
                 <span class="email">&lt;<?= e($m['email']) ?>&gt;</span>
-                <small class="data"><?= e($m['criado_em']) ?></small>
-                <p><?= nl2br(e($m['mensagem'])) ?></p>
+                <small class="data"><?= e($m['created_at']) ?></small>
+                <p><?= nl2br(e($m['message'])) ?></p>
             </li>
         <?php endforeach; ?>
     </ul>

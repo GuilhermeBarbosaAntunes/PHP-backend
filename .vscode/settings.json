@@ -1,3 +1,5 @@
 {
-  "git.postCommitCommand": "push"
+  "git.postCommitCommand": "push",
+  "php.validate.executablePath": "C:\\Users\\user\\Documents\\laragon\\bin\\php\\php-8.3.36-Win32-vs16-x64\\php.exe",
+  "php.debug.executablePath": "C:\\Users\\user\\Documents\\laragon\\bin\\php\\php-8.3.36-Win32-vs16-x64\\php.exe"
 }

@@ -25,6 +25,6 @@ if (!isset($Title)) {
     </header>
 
     <main class="container">
-        <?php foreach (pegar_flashes() as $f): ?>
-            <div class="alerta <?= e($f['tipo']) ?>"><?= e($f['msg']) ?></div>
+        <?php foreach (get_flashes() as $f): ?>
+            <div class="alert <?= e($f['tipo']) ?>"><?= e($f['msg']) ?></div>
         <?php endforeach; ?>

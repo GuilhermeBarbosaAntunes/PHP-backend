@@ -1,14 +1,14 @@
 document.addEventListener('DOMContentLoaded', () => {
     // Character counter for the contact form
-    const txt = document.querySelector('.form-contato textarea');
+    const txt = document.querySelector('.form-contact textarea');
     if (txt) {
-        const contador = document.createElement('small');
-        contador.style.color = '#94a3b8';
-        txt.after(contador);
-        const atualizar = () => {
-            contador.textContent = `${txt.value.length} characters (mín. 10)`;
+        const accountant = document.createElement('small');
+        accountant.style.color = '#94a3b8';
+        txt.after(accountant);
+        const update = () => {
+            accountant.textContent = `${txt.value.length} characters (mín. 10)`;
         };
-        txt.addEventListener('input', atualizar);
-        atualizar();
+        txt.addEventListener('input', update);
+        update();
     }
 });

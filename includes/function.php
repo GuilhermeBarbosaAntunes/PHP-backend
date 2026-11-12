@@ -24,7 +24,7 @@ function flash(string $type, string $msg): void
 }
 
 /** Retrieves and clears flash messages. */
-function pegar_flashes(): array
+function get_flashes(): array
 {
     $f = $_SESSION['flash'] ?? [];
     unset($_SESSION['flash']);

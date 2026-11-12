@@ -5,50 +5,50 @@ require __DIR__ . '/includes/config.php';
 require __DIR__ . '/includes/db.php';
 require __DIR__ . '/includes/funcoes.php';
 
-$filtro = $_GET['filtro'] ?? 'todas';
-$busca  = trim((string) ($_GET['busca'] ?? ''));
+$filter = $_GET['filter'] ?? 'all';
+$search  = trim((string) ($_GET['search'] ?? ''));
 
 /* ============================================================
    ACTIONS (POST) - all use PRG: process, then redirect
    ============================================================ */
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     csrf_check();
-    $acao = $_POST['acao'] ?? '';
+    $action = $_POST['action'] ?? '';
 
-    switch ($acao) {
+    switch ($action) {
 
-        case 'criar':
-            $titulo = trim((string) ($_POST['titulo'] ?? ''));
+        case 'create':
+            $title = trim((string) ($_POST['title'] ?? ''));
 
-            if ($titulo === '') {
-                flash('erro', 'O título não pode ficar vazio.');
-            } elseif (mb_strlen($titulo) > 120) {
-                flash('erro', 'Máximo de 120 caracteres no título.');
+            if ($title === '') {
+                flash('error', 'The title cannot be left blank.');
+            } elseif (mb_strlen($title) > 120) {
+                flash('error', 'Maximum of 120 characters in the title.');
             } else {
-                $stmt = $pdo->prepare('INSERT INTO tarefas (titulo) VALUES (:t)');
-                $stmt->execute([':t' => $titulo]);
-                flash('sucesso', 'Tarefa criada.');
+                $stmt = $pdo->prepare('INSERT INTO tasks (title) VALUES (:t)');
+                $stmt->execute([':t' => $title]);
+                flash('success', 'Task created.');
             }
             break;
 
-        case 'alternar':
+        case 'toggle':
             $id = (int) ($_POST['id'] ?? 0);
             $stmt = $pdo->prepare(
-                'UPDATE tarefas SET concluida = 1 - concluida WHERE id = :id'
+                'UPDATE tasks SET completed = 1 - completed WHERE id = :id'
             );
             $stmt->execute([':id' => $id]);
-            flash('sucesso', 'Status alterado.');
+            flash('success', 'Status changed.');
             break;
 
         case 'excluir':
             $id = (int) ($_POST['id'] ?? 0);
-            $stmt = $pdo->prepare('DELETE FROM tarefas WHERE id = :id');
+            $stmt = $pdo->prepare('DELETE FROM tasks WHERE id = :id');
             $stmt->execute([':id' => $id]);
-            flash('sucesso', 'Tarefa removida.');
+            flash('success', 'Task removed.');
             break;
     }
 
-    redirect('index.php?filtro=' . urlencode($filtro) . '&busca=' . urlencode($busca));
+    redirect('index.php?filter=' . urlencode($filter) . '&search=' . urlencode($search));
 }
 
 /* ============================================================
@@ -57,32 +57,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $where  = [];
 $params = [];
 
-if ($filtro === 'pendentes')  { $where[] = 'concluida = 0'; }
-if ($filtro === 'concluidas') { $where[] = 'concluida = 1'; }
+if ($filter === 'pending')  { $where[] = 'completed = 0'; }
+if ($filter === 'completed') { $where[] = 'completed = 1'; }
 
-if ($busca !== '') {
-    $where[] = 'titulo LIKE :busca';
-    $params[':busca'] = '%' . $busca . '%';
+if ($search !== '') {
+    $where[] = 'title LIKE :search';
+    $params[':search'] = '%' . $search . '%';
 }
 
-$sql = 'SELECT id, titulo, concluida, criado_em FROM tarefas';
+$sql = 'SELECT id, title, completed, created_at FROM tasks';
 if ($where) {
     $sql .= ' WHERE ' . implode(' AND ', $where);
 }
-$sql .= ' ORDER BY concluida ASC, id DESC';
+$sql .= ' ORDER BY completed ASC, id DESC';
 
 $stmt = $pdo->prepare($sql);
 $stmt->execute($params);
-$tarefas = $stmt->fetchAll();
+$tasks = $stmt->fetchAll();
 
 $stats = $pdo->query("
     SELECT COUNT(*) AS total,
-           COALESCE(SUM(CASE WHEN concluida = 0 THEN 1 ELSE 0 END), 0) AS pendentes,
-           COALESCE(SUM(CASE WHEN concluida = 1 THEN 1 ELSE 0 END), 0) AS concluidas
-    FROM tarefas
+           COALESCE(SUM(CASE WHEN completed = 0 THEN 1 ELSE 0 END), 0) AS pending,
+           COALESCE(SUM(CASE WHEN completed = 1 THEN 1 ELSE 0 END), 0) AS completed
+    FROM tasks
 ")->fetch();
 
-$titulo = 'Tarefas';
+$title = 'Tasks';
 include __DIR__ . '/includes/header.php';
 ?>
 
@@ -90,54 +90,54 @@ include __DIR__ . '/includes/header.php';
 
 <section class="stats">
     <div class="stat"><span><?= (int) $stats['total'] ?></span>Total</div>
-    <div class="stat pendente"><span><?= (int) $stats['pendentes'] ?></span>Pendentes</div>
-    <div class="stat feita"><span><?= (int) $stats['concluidas'] ?></span>Concluídas</div>
+    <div class="stat pending"><span><?= (int) $stats['pending'] ?></span>Pending</div>
+    <div class="stat completed"><span><?= (int) $stats['completed'] ?></span>Completed</div>
 </section>
 
 <form method="POST" class="form-inline">
     <?= csrf_campo() ?>
-    <input type="hidden" name="acao" value="criar">
-    <input type="text" name="titulo" placeholder="Nova tarefa…" maxlength="120" required autofocus>
-    <button class="btn" type="submit">Adicionar</button>
+    <input type="hidden" name="action" value="create">
+    <input type="text" name="title" placeholder="New task…" maxlength="120" required autofocus>
+    <button class="btn" type="submit">Add</button>
 </form>
 
 <form method="GET" class="filtros">
-    <input type="text" name="busca" value="<?= e($busca) ?>" placeholder="Buscar…">
-    <button class="btn btn-sec" type="submit">Filtrar</button>
+    <input type="text" name="search" value="<?= e($search) ?>" placeholder="Search…">
+    <button class="btn btn-sec" type="submit">Filter</button>
 
     <nav class="tabs">
-        <a href="?filtro=todas<?= $busca ? '&busca=' . urlencode($busca) : '' ?>"
-           class="<?= $filtro === 'todas' ? 'ativo' : '' ?>">Todas</a>
-        <a href="?filtro=pendentes<?= $busca ? '&busca=' . urlencode($busca) : '' ?>"
-           class="<?= $filtro === 'pendentes' ? 'ativo' : '' ?>">Pendentes</a>
-        <a href="?filtro=concluidas<?= $busca ? '&busca=' . urlencode($busca) : '' ?>"
-           class="<?= $filtro === 'concluidas' ? 'ativo' : '' ?>">Concluídas</a>
+        <a href="?filter=all<?= $search ? '&search=' . urlencode($search) : '' ?>"
+           class="<?= $filter === 'all' ? 'active' : '' ?>">All</a>
+        <a href="?filter=pending<?= $search ? '&search=' . urlencode($search) : '' ?>"
+           class="<?= $filter === 'pending' ? 'active' : '' ?>">Pending</a>
+        <a href="?filter=completed<?= $search ? '&search=' . urlencode($search) : '' ?>"
+           class="<?= $filter === 'completed' ? 'active' : '' ?>">Completed</a>
     </nav>
 </form>
 
-<?php if (!$tarefas): ?>
-    <p class="vazio">Nenhuma tarefa encontrada.</p>
+<?php if (!$tasks): ?>
+    <p class="void">No tasks found.</p>
 <?php else: ?>
-    <ul class="lista-tarefas">
-        <?php foreach ($tarefas as $t): ?>
-            <li class="<?= $t['concluida'] ? 'feita' : '' ?>">
-                <span class="titulo"><?= e($t['titulo']) ?></span>
-                <small class="data"><?= e($t['criado_em']) ?></small>
+    <ul class="todo-list">
+        <?php foreach ($tasks as $t): ?>
+            <li class="<?= $t['completed'] ? 'made' : '' ?>">
+                <span class="title"><?= e($t['title']) ?></span>
+                <small class="data"><?= e($t['created_at']) ?></small>
 
                 <form method="POST" class="inline">
                     <?= csrf_campo() ?>
-                    <input type="hidden" name="acao" value="alternar">
+                    <input type="hidden" name="action" value="toggle">
                     <input type="hidden" name="id" value="<?= (int) $t['id'] ?>">
                     <button class="btn-mini" type="submit">
-                        <?= $t['concluida'] ? '↩ Reabrir' : '✔ Concluir' ?>
+                        <?= $t['completed'] ? '↩ Reopen' : '✔ Complete' ?>
                     </button>
                 </form>
 
-                <form method="POST" class="inline" onsubmit="return confirm('Excluir esta tarefa?')">
+                <form method="POST" class="inline" onsubmit="return confirm('Delete this task?');">
                     <?= csrf_campo() ?>
-                    <input type="hidden" name="acao" value="excluir">
+                    <input type="hidden" name="action" value="delete">
                     <input type="hidden" name="id" value="<?= (int) $t['id'] ?>">
-                    <button class="btn-mini btn-perigo" type="submit">🗑 Excluir</button>
+                    <button class="btn-mini btn-perigo" type="submit">🗑 Delete</button>
                 </form>
             </li>
         <?php endforeach; ?>

@@ -1,6 +1,6 @@
     </main>
 
-    <footer class="rodape">
+    <footer class="footer">
         <div class="container">
             <p>&copy; <?= date('Y') ?> PHP backend students</p>
         </div>
