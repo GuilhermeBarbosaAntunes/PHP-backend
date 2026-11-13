@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 require __DIR__ . '/includes/config.php';
-require __DIR__ . '/includes/db.php';
+$pdo = require __DIR__ . '/includes/db.php';
 require __DIR__ . '/includes/function.php';
 
 $filter = $_GET['filter'] ?? 'all';

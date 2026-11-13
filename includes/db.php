@@ -7,15 +7,6 @@ $dbName = getenv('DB_NAME') ?: 'estudo_php';
 $dbUser = getenv('DB_USER') ?: 'root';
 $dbPassword = getenv('DB_PASSWORD') ?: '162534';
 
-if ($dbPassword === false) {
-    $dbPassword = '';
-}
-
-if ($dbUser === false || $dbUser === '') {
-    http_response_code(500);
-    exit('Configure DB_USER and the other MySQL connection variables before starting the project.');
-}
-
 if (
     preg_match('/\A[a-zA-Z0-9.-]+\z/', $dbHost) !== 1
     || filter_var($dbPort, FILTER_VALIDATE_INT, [
@@ -65,3 +56,5 @@ $pdo->exec("
         created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 ");
+
+return $pdo;

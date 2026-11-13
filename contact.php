@@ -2,8 +2,8 @@
 declare(strict_types=1);
 
 require __DIR__ . '/includes/config.php';
-require __DIR__ . '/includes/db.php';
 require __DIR__ . '/includes/function.php';
+$pdo = require __DIR__ . '/includes/db.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     csrf_check();
