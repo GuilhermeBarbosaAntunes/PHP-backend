@@ -4,7 +4,7 @@ declare(strict_types=1);
 $dbHost = getenv('DB_HOST') ?: '127.0.0.1';
 $dbPort = getenv('DB_PORT') ?: '3306';
 $dbName = getenv('DB_NAME') ?: 'estudo_php';
-$dbUser = getenv('DB_USER');
+$dbUser = getenv('DB_USER') ?: 'root';
 $dbPassword = getenv('DB_PASSWORD') ?: '162534';
 
 if ($dbPassword === false) {

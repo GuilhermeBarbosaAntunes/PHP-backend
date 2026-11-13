@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 require __DIR__ . '/includes/config.php';
 require __DIR__ . '/includes/db.php';
-require __DIR__ . '/includes/funcoes.php';
+require __DIR__ . '/includes/function.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     csrf_check();

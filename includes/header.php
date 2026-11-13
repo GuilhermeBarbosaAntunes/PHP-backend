@@ -8,7 +8,7 @@ if (!isset($Title)) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= e($Title) ?> | My Site</title>
+    <title><?= e($Title) ?> My Site</title>
     <link rel="stylesheet" href="css/estilo.css">
 </head>
 <body>
